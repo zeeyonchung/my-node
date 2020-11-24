@@ -5,26 +5,27 @@ const users = {
 
 };
 
-http.createServer((req, res) => {
-   if (req.method === 'GET') {
-      if (req.url === '/') {
-         return fs.readFile('./restFront.html', (err, data) => {
+const router = {
+   get: {
+      '/': (req, res) => {
+         fs.readFile('./restFront.html', (err, data) => {
             if (err) {
                throw err;
             }
             res.end(data);
          });
-      } else if (req.url === '/users') {
-         return res.end(JSON.stringify(users));
+      },
+      '/users': (req, res) => {
+         res.end(JSON.stringify(users));
+      },
+      '*': (req, res) => {
+         fs.readFile(`.${req.url}`, (err, data) => {
+            return res.end(data);
+         });
       }
-
-      return fs.readFile(`.${req.url}`, (err, data) => {
-         return res.end(data);
-      });
-   } else if (req.method === 'POST') {
-      if (req.url === '/') {
-
-      } else if (req.url === '/users') {
+   },
+   post: {
+      '/users': (req, res) => {
          // 요청 body 받기
          let body = '';
          req.on('data', (chunk) => {
@@ -39,16 +40,9 @@ http.createServer((req, res) => {
             res.end('사용자 등록 성공');
          });
       }
-   } else if (req.method === 'PATCH') {
-      if (req.url === '/') {
-
-      } else if (req.url === '/users') {
-
-      }
-   } else if (req.method === 'PUT') {
-      if (req.url === '/') {
-
-      } else if (req.url.startsWith('/users/')) {
+   },
+   put: {
+      '/users': (req, res) => {
          const id = req.url.split('/')[2];
          let body = '';
          req.on('data', (chunk) => {
@@ -60,10 +54,9 @@ http.createServer((req, res) => {
             return res.end(JSON.stringify(users));
          });
       }
-   } else if (req.method === 'DELETE') {
-      if (req.url === '/') {
-
-      } else if (req.url.startsWith('/users/')) {
+   },
+   delete: {
+      '/users': (req, res) => {
          const id = req.url.split('/')[2];
          let body = '';
          req.on('data', (chunk) => {
@@ -76,7 +69,11 @@ http.createServer((req, res) => {
          });
       }
    }
+};
 
+http.createServer((req, res) => {
+   const matchedUrl = router[req.method.toLowerCase()][req.url];
+   (matchedUrl || router[req.method.toLowerCase()]['*'])(req, res);
 }).listen(8085, () => {
    console.log('8085번 서버 대기 중');
 });
