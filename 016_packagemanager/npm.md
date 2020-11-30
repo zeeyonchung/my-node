@@ -79,3 +79,14 @@ npm publish
 # 삭제하기 (24시간 안에만 가능)
 npm unpublish npmtest-2949 --force
 ```
+
+## 프로그램 실행하기
+- `node main.js`: main.js 실행
+```json
+{
+    "scripts": {
+      "start": "node ./bin/www"
+    }
+}
+```
+- `npm start`: package.json의 scripts에 있는 start 명령어가 실행. 설정이 없다면 `node server.js`가 실행.  
