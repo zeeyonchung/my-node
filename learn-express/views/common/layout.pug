@@ -1,0 +1,16 @@
+doctype html
+html
+    head
+        -const title = '익스프레스'
+        -const title2 = '안녕'
+        -const temp = true
+        title= title + ' ' + title2 + ' ' + title3
+        link(rel='stylesheet', href='/stylesheets/style.css')
+    body
+        include header
+        block content
+        include footer
+        script.
+            let message = 'layout.pug';
+            alert(message);
+        block script

@@ -10,6 +10,7 @@ const app2 = express();
  * 익스프레스 설정, 값 저장
  */
 app2.set('views', path.join(__dirname, 'views'));
+app2.set('view engine', 'pug');
 
 /**
  * 미들웨어 장착
@@ -44,8 +45,16 @@ app2.use(session({
  */
 // 라우터도 미들웨어다!
 // next도 않고 res도 않으면 클라이언트는 계속 기다리게 된다.
-app2.get('/', (req, res) => {
-    res.send('Hello World');
+app2.get('/', (req, res, next) => {
+    // 문자열 리턴
+    // res.send('Hello World');
+
+    // test pug 렌더링
+    // console > express learn-express --view=pug (html 대신 pug 사용)
+    res.render('test', {
+        title3: '이렇게 변수 사용 가능',
+        fruits: ['사과', '배', '오렌지'],
+    });
 });
 
 /**
@@ -59,6 +68,7 @@ app2.use((req, res, next) => {
 // 500 ERROR 처리
 // next(err)가 호출되면 다른 미들웨어를 건너뛰고 에러 처리 미들웨어로 이동한다.
 app2.use((err, req, res, next) => {
+    console.log(err);
     res.status(err.status || 500).send('ERROR');
 });
 

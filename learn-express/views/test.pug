@@ -1,0 +1,23 @@
+extends common/layout
+
+block content
+    div(id='divId' width=500)
+    #div2Id(width=500)
+    span#spanId.span-class(class='span-class-2')
+    button(type='submit')
+    if temp
+        div 참
+    else
+        div 거짓
+    for i in fruits
+        div= i
+    p
+        | 여
+        | 러
+        | 줄
+        br
+        | 이야~
+block script
+    script.
+        let message2 = 'test.pug';
+        alert(message2);
