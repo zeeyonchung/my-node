@@ -63,6 +63,7 @@ app2.get('/', (req, res, next) => {
  */
 // 404 NOT FOUND 처리
 app2.use((req, res, next) => {
+    app2.set('hello', 'world');
    res.status(404).send('NOT FOUND');
 });
 
@@ -70,6 +71,18 @@ app2.use((req, res, next) => {
 // next(err)가 호출되면 다른 미들웨어를 건너뛰고 에러 처리 미들웨어로 이동한다.
 app2.use((err, req, res, next) => {
     console.log(err);
+
+    // tip. 다른 미들웨어 안에서도 설정할 수 있게 res.locals를 사용한다.
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+    // tip. 미들웨어끼리의 변수 교환
+    // 요청 전체가 공유하게 된다.
+    app2.get('hello');
+
+    // tip. 어느 요청에서만 공유하고 싶다면 req에 저장한다.
+    req.password = 'world';
+
     res.status(err.status || 500).send('ERROR');
 });
 
