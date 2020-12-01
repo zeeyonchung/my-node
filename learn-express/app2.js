@@ -10,7 +10,8 @@ const app2 = express();
  * 익스프레스 설정, 값 저장
  */
 app2.set('views', path.join(__dirname, 'views'));
-app2.set('view engine', 'pug');
+// app2.set('view engine', 'pug');
+app2.set('view engine', 'ejs'); // ejs보다 nunjucks가 더 좋을걸
 
 /**
  * 미들웨어 장착
@@ -51,7 +52,7 @@ app2.get('/', (req, res, next) => {
 
     // test pug 렌더링
     // console > express learn-express --view=pug (html 대신 pug 사용)
-    res.render('test', {
+    res.render('ejs/test', {
         title3: '이렇게 변수 사용 가능',
         fruits: ['사과', '배', '오렌지'],
     });
