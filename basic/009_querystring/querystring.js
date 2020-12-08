@@ -1,5 +1,5 @@
 const url = require('url');
-const querystring = require('querystring');
+const querystring = require('basic/009_querystring/querystring');
 
 const parsedUrl = url.parse('https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=%EC%95%88%EB%85%95');
 const query = querystring.parse(parsedUrl.query);

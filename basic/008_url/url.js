@@ -1,4 +1,4 @@
-const url = require('url');
+const url = require('basic/008_url/url');
 
 /**
  * WHATWG 방식 url.URL

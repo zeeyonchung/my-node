@@ -1,7 +1,7 @@
 /**
  * os : 운영체제와 관련된 모듈
  */
-const os = require('os');
+const os = require('basic/006_os/os');
 
 console.log(os.arch()); //x64
 console.log(os.platform()); //win32

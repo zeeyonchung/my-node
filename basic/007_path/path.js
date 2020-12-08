@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('basic/007_path/path');
 
 console.log(path.sep); // \ : 경로 구분자
 console.log(path.delimiter); // ; : 환경변수 구분자
