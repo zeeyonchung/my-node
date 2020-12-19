@@ -4,6 +4,7 @@ const Comment = require('../schemas/comment');
 
 router.get('/:id', (req, res, next) => {
     Comment.find({ commenter: req.params.id })
+        .populate('commenter')
         .then((comments) => {
             res.json(comments);
         })
