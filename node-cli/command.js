@@ -2,6 +2,8 @@
 const program = require('commander');
 const fs = require('fs');
 const path = require('path');
+const inquirer = require('inquirer');
+const chalk = require('chalk');
 
 const htmlTemplate = `<!DOCTYPE html>
 <html>
@@ -54,21 +56,21 @@ const makeTemplate = (type, name, directory) => {
     if (type === 'html') {
         const pathToFile = path.join(directory, `${name}.html`);
         if (exist(pathToFile)) {
-            console.error('이미 해당 파일이 존재합니다.');
+            console.error(chalk.bold.red('이미 해당 파일이 존재합니다.'));
         } else {
             fs.writeFileSync(pathToFile, htmlTemplate);
-            console.log(pathToFile, '생성 완료');
+            console.log(pathToFile, chalk.green('생성 완료'));
         }
     } else if (type === 'express-router') {
         const pathToFile = path.join(directory, `${name}.js`);
         if (exist(pathToFile)) {
-            console.error('이미 해당 파일이 존재합니다.');
+            console.error(chalk.bold.red('이미 해당 파일이 존재합니다.'));
         } else {
             fs.writeFileSync(pathToFile, routerTemplate);
-            console.log(pathToFile, '생성 완료');
+            console.log(pathToFile, chalk.green('생성 완료'));
         }
     } else {
-        console.error('html 또는 express-router 둘 중 하나를 입력하세요.');
+        console.error(chalk.bold.red('html 또는 express-router 둘 중 하나를 입력하세요.'));
     }
 };
 
@@ -88,11 +90,37 @@ program
     });
 
 program
-    .command('*', { noHelp: true })
-    .action(() => {
-        console.log('해당 명령어를 찾을 수 없습니다.');
-        program.help();
-    });
-
-program
+    .action((cmd, args) => {
+        if (args) {
+            console.log(chalk.bold.red('해당 명령어를 찾을 수 없습니다.'));
+            program.help();
+        } else {
+            inquirer.prompt([{
+                type: 'list',
+                name: 'type',
+                message: '템플릿 종류를 선택하세요.',
+                choices: ['html', 'express-router'],
+            }, {
+                type: 'input',
+                name: 'filename',
+                message: '파일의 이름을 입력하세요.',
+                default: 'index',
+            }, {
+                type: 'input',
+                name: 'directory',
+                message: '파일이 위치할 폴더의 경로를 입력하세요.',
+                default: '.',
+            }, {
+                type: 'confirm',
+                name: 'confirm',
+                message: '생성하시겠습니까?',
+            }])
+                .then((answers) => {
+                    if (answers.confirm) {
+                        makeTemplate(answers.type, answers.filename, answers.directory);
+                        console.log(chalk.rgb(128, 128, 128)('터미널을 종료합니다.'));
+                    }
+                });
+        }
+    })
     .parse(process.argv);
