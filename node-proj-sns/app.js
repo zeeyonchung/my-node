@@ -7,8 +7,10 @@ const nunjucks = require('nunjucks');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
+const { sequelize } = require('./models');
 
 const app = express();
+sequelize.sync();
 
 app.set('view engine', 'html');
 nunjucks.configure('views', {
