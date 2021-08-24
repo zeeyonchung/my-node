@@ -4,12 +4,16 @@ const morgan = require('morgan');
 const path = require('path');
 const session = require('express-session');
 const nunjucks = require('nunjucks');
+const passport = require('passport');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth');
 const { sequelize } = require('./models');
+const passportConfig = require('./passport');
 
 const app = express();
+passportConfig();
 sequelize.sync();
 
 app.set('view engine', 'html');
@@ -33,8 +37,11 @@ app.use(session({
         secure: false,
     }
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', indexRouter);
+app.use('/auth', authRouter);
 
 app.use((req, res, next) => {
     const err = new Error(`${req.method} ${req.url} Not Found`);
